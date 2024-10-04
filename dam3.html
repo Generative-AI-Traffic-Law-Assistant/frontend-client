@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Traffic_Law</title>
+    <style>
+        @font-face {
+            font-family: 'Paperlogy-8ExtraBold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+            font-weight: 800;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* 수평 가운데 정렬 */
+            justify-content: center; /* 수직 가운데 정렬 */
+            height: 100vh; /* 화면 높이를 100%로 설정 */
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9; /* 배경색 추가 */
+        }
+        form {
+            font-family: 'GmarketSansMedium';
+            display: flex;
+            flex-direction: column;
+            align-items: stretch; /* 폼 안의 요소들을 수평으로 늘리기 */
+            width: 300px; /* 폼의 너비 설정 */
+            padding: 20px; /* 폼 안쪽 여백 추가 */
+            border: 1px solid #ccc; /* 테두리 추가 */
+            border-radius: 5px; /* 모서리 둥글게 */
+            background-color: #fff; /* 폼 배경색 추가 */
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1); /* 그림자 추가 */
+        }
+        h1, h3 {
+            font-family: 'Paperlogy-8ExtraBold';
+            text-align: center; /* 제목 가운데 정렬 */
+            margin: 10px 0; /* 제목 간격 조정 */
+        }
+        label {
+            margin-bottom: 5px; /* 라벨과 입력 필드 간격 */
+            font-size: 15px; /* 라벨 글자 크기 설정 */
+            text-align: center; /* 라벨 가운데 정렬 */
+        }
+        input, select {
+            font-family: 'GmarketSansMedium';
+            width: 100%; /* 입력 필드와 선택 박스의 너비를 100%로 설정 */
+            padding: 10px; /* 패딩 추가 */
+            margin-bottom: 15px; /* 입력 필드 간격 */
+            box-sizing: border-box; /* 패딩을 포함한 너비 설정 */
+            border: 1px solid #ccc; /* 입력 필드 테두리 추가 */
+            border-radius: 4px; /* 입력 필드 모서리 둥글게 */
+        }
+        button {
+            font-family: 'GmarketSansMedium';
+            padding: 10px 20px; /* 버튼 패딩 */
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%; /* 버튼의 너비를 100%로 설정 */
+            background-color: #8cb1de; /* 버튼 배경색 */
+            color: white; /* 버튼 글자색 */
+            border: none; /* 버튼 테두리 제거 */
+            border-radius: 5px; /* 버튼 모서리 둥글게 */
+        }
+        button:hover {
+            background-color: #6c88aa; /* 버튼 호버 색상 */
+        }
+    </style>
+</head>
+<body>
+
+<h1>🛴킥보드 사고 처리 시스템</h1>
+<h3>무슨 피해를 입으셨나요?</h3>
+
+<form action="dam4.html" method="POST">
+    <div>
+        <label for="insurance-status">7. 가입된 자동차 보험 여부:</label>
+        <br>
+        <label for="insurance-status" style="font-size: 90%"> - 무보험차 상해 특약 여부 확인</label>
+        <select id="insurance-status" name="insurance-status" required>
+            <option value="yes">가입</option>
+            <option value="no">미가입</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="report-status">8. 신고 여부:</label>
+        <select id="report-status" name="report-status" required>
+            <option value="reported">신고함</option>
+            <option value="not-reported">신고하지 않음</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="witness-name">9. 목격자 정보:</label>
+        <input type="text" id="witness-name" name="witness-name" placeholder="목격자 이름 (있다면)">
+        <input type="tel" id="witness-contact" name="witness-contact" placeholder="목격자 연락처 (있다면)">
+    </div>
+
+    <button type="submit">다음</button>
+</form>
+
+</body>
+</html>

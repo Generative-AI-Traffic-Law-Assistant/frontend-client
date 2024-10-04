@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Traffic_Law</title>
+    <style>
+        @font-face {
+            font-family: 'Paperlogy-8ExtraBold';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/2408-3@1.0/Paperlogy-8ExtraBold.woff2') format('woff2');
+            font-weight: 800;
+            font-style: normal;
+        }
+        @font-face {
+            font-family: 'GmarketSansMedium';
+            src: url('https://fastly.jsdelivr.net/gh/projectnoonnu/noonfonts_2001@1.1/GmarketSansMedium.woff') format('woff');
+            font-weight: normal;
+            font-style: normal;
+        }
+        body {
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+        }
+        h2 {
+            font-family: 'Paperlogy-8ExtraBold';
+            margin-bottom: 40px;
+        }
+        .container {
+            font-family: 'GmarketSansMedium';
+            width: 100%;
+            max-width: 600px;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 400px; /* 최대 높이 설정 */
+            position: relative;
+            margin-bottom: 70px; /* 입력란과 버튼을 위한 여백 */
+        }
+        .entry {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #b8d0ed; /* 질문 배경 색상 */
+        }
+        .response {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            background-color: #8ea7c6; /* 답변 배경 색상 */
+        }
+        .response-container {
+            background-color: #8ea7c6; /* 대답 배경 색상 */
+            padding: 10px;
+            border: 1px solid #7e94af;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+        .lawyer-recommendation {
+            background-color: #8ea7c6; /* 변호사 추천  */
+            padding: 10px;
+            border: 1px solid #7e94af;
+            border-radius: 5px;
+        }
+        .input-container {
+            display: flex;
+            position: fixed; /* 화면 하단에 고정 */
+            bottom: 40px; /* 하단 여백 */
+            left: 50%;
+            transform: translateX(-50%); /* 중앙 정렬 */
+            width: calc(100% - 40%); /* 여백을 고려한 너비 */
+        }
+        input[type="text"] {
+            font-family: 'GmarketSansMedium';
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            height: 50px;
+            width: 70%;
+            font-size: 16px;
+        }
+        button {
+            font-family: 'GmarketSansMedium';
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: #8cb1de;
+            color: white;
+            cursor: pointer;
+            margin-left: 10px;
+            font-size: 15px;
+        }
+        button:hover {
+            background-color: #6c88aa;
+        }
+    </style>
+</head>
+<body>
+
+<h2>🛴 킥보드 사고 처리 시스템</h2>
+<div class="container" id="qaContainer">
+</div>
+
+<div class="input-container">
+    <input type="text" id="userInput" placeholder="질문을 입력하세요...">
+    <button onclick="submitQuestion()">제출</button>
+</div>
+
+<script>
+    // 페이지가 로드될 때 기본 대답 추가
+    document.addEventListener('DOMContentLoaded', () => {
+        const responseDiv = document.createElement('div');
+        responseDiv.className = 'response-container';
+        responseDiv.innerHTML = '초기대답글<br>이렇게 해야 한다~~!';
+
+        const lawyerRecommendationDiv = document.createElement('div');
+        lawyerRecommendationDiv.className = 'lawyer-recommendation';
+        lawyerRecommendationDiv.innerHTML = '관련 변호사 추천<br>변호사 정보(이름, 소개글, email, 전화)';
+
+        document.getElementById('qaContainer').appendChild(responseDiv);
+        document.getElementById('qaContainer').appendChild(lawyerRecommendationDiv);
+    });
+
+    function submitQuestion() {
+        const inputField = document.getElementById('userInput');
+        const question = inputField.value.trim();
+
+        if (question) {
+            // 질문을 표시
+            const questionDiv = document.createElement('div');
+            questionDiv.className = 'entry';
+            questionDiv.textContent = question;
+            document.getElementById('qaContainer').prepend(questionDiv);
+
+            // 입력 필드 초기화
+            inputField.value = '';
+
+            // 로딩 후 답변 표시
+            setTimeout(() => {
+                const responseDiv = document.createElement('div');
+                responseDiv.className = 'response';
+                responseDiv.textContent = '대답입니다'; // 여기서 실제 답변을 추가할 수 있습니다.
+                document.getElementById('qaContainer').prepend(responseDiv);
+            }, 1000); // 1초 후에 답변 출력
+        }
+    }
+</script>
+
+</body>
+</html>
