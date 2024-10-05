@@ -78,29 +78,37 @@
 <h1>🛴킥보드 사고 처리 시스템</h1>
 <h3>무슨 사고가 발생했나요?</h3>
 
-<form action="acc3.html" method="POST">
+<form id="step2Form" onsubmit="saveStep2Data(event)">
     <div>
         <label for="scooter-type">4. 킥보드 정보:</label>
-        <input type="text" id="scooter-type" name="scooter-type" placeholder="전동킥보드 종류 및 상태" required>
+        <input type="text" id="scooter-type" name="scooter-type" required>
     </div>
     <div>
         <label for="insurance-status">5. 보험 가입 여부:</label>
-        <br>
-        <label for="insurance-status" style="font-size: 90%"> - 무보험차 상해 특약 여부 확인</label>
         <select id="insurance-status" name="insurance-status" required>
             <option value="yes">가입</option>
             <option value="no">미가입</option>
         </select>
     </div>
-    <div>
-        <label for="report-status">6. 신고 여부:</label>
-        <select id="report-status" name="report-status" required>
-            <option value="reported">신고함</option>
-            <option value="not-reported">신고하지 않음</option>
-        </select>
-    </div>
     <button type="submit">다음</button>
 </form>
 
-</body>
+<script>
+    function saveStep2Data(event) {
+        event.preventDefault();
+
+        // 첫 번째 페이지에서 저장된 데이터를 가져옴
+        const perpetratorData = JSON.parse(localStorage.getItem('perpetratorData'));
+
+        // 두 번째 페이지의 데이터를 추가
+        perpetratorData.vehicleInfo = document.getElementById('scooter-type').value;
+        perpetratorData.insuranceStatus = document.getElementById('insurance-status').value === 'yes';
+
+        // 업데이트된 데이터를 다시 localStorage에 저장
+        localStorage.setItem('perpetratorData', JSON.stringify(perpetratorData));
+
+        // 다음 페이지로 이동
+        window.location.href = 'acc3.html';
+    }
+</script>
 </html>
