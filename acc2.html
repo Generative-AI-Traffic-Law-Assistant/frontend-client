@@ -84,11 +84,9 @@
         <input type="text" id="scooter-type" name="scooter-type" required>
     </div>
     <div>
-        <label for="insurance-status">5. 보험 가입 여부:</label>
-        <select id="insurance-status" name="insurance-status" required>
-            <option value="yes">가입</option>
-            <option value="no">미가입</option>
-        </select>
+        <label for="insurance-status">5. 보험 가입 상태:</label>
+        <input type="text" id="insurance-status" name="insurance-status" required>
+        
     </div>
     <button type="submit">다음</button>
 </form>
@@ -101,8 +99,8 @@
         const perpetratorData = JSON.parse(localStorage.getItem('perpetratorData'));
 
         // 두 번째 페이지의 데이터를 추가
-        perpetratorData.vehicleInfo = document.getElementById('scooter-type').value;
-        perpetratorData.insuranceStatus = document.getElementById('insurance-status').value === 'yes';
+        perpetratorData.scooterInfo = document.getElementById('scooter-type').value;
+        perpetratorData.insuranceStatus = document.getElementById('insurance-status').value;
 
         // 업데이트된 데이터를 다시 localStorage에 저장
         localStorage.setItem('perpetratorData', JSON.stringify(perpetratorData));

@@ -115,17 +115,26 @@
 <script>
     // 페이지가 로드될 때 기본 대답 추가
     document.addEventListener('DOMContentLoaded', () => {
-        const responseDiv = document.createElement('div');
-        responseDiv.className = 'response-container';
-        responseDiv.innerHTML = '초기대답글<br>이렇게 해야 한다~~!';
+    const responseDiv = document.createElement('div');
+    responseDiv.className = 'response-container';
 
-        const lawyerRecommendationDiv = document.createElement('div');
-        lawyerRecommendationDiv.className = 'lawyer-recommendation';
-        lawyerRecommendationDiv.innerHTML = '관련 변호사 추천<br>변호사 정보(이름, 소개글, email, 전화)';
+    // localStorage에서 저장된 response 데이터 가져오기
+    const savedResponse = localStorage.getItem('response');
+    if (savedResponse) {
+        const parsedResponse = JSON.parse(savedResponse);
+        responseDiv.innerHTML = `답변: ${parsedResponse.answer.result}`;
+    } else {
+        responseDiv.innerHTML = '응답을 찾을 수 없습니다.';
+    }
 
-        document.getElementById('qaContainer').appendChild(responseDiv);
-        document.getElementById('qaContainer').appendChild(lawyerRecommendationDiv);
-    });
+    const lawyerRecommendationDiv = document.createElement('div');
+    lawyerRecommendationDiv.className = 'lawyer-recommendation';
+    lawyerRecommendationDiv.innerHTML = '관련 변호사 추천<br>변호사 정보(이름, 소개글, email, 전화)';
+
+    document.getElementById('qaContainer').appendChild(responseDiv);
+    document.getElementById('qaContainer').appendChild(lawyerRecommendationDiv);
+});
+
 
     function submitQuestion() {
         const inputField = document.getElementById('userInput');
