@@ -78,7 +78,7 @@
 <h1>🛴킥보드 사고 처리 시스템</h1>
 <h3>무슨 사고가 발생했나요?</h3>
 
-<form action="acc2.html" method="POST">
+<form id="step1Form" onsubmit="saveStep1Data(event)">
     <div>
         <label for="accident-date">1. 사고 날짜 및 시간:</label>
         <input type="datetime-local" id="accident-date" name="accident-date" required>
@@ -99,6 +99,23 @@
     </div>
     <button type="submit">다음</button>
 </form>
+
+<script>
+    function saveStep1Data(event) {
+        event.preventDefault();
+
+        // 첫 번째 페이지의 데이터를 localStorage에 저장
+        const perpetratorData = {
+            accidentDate: document.getElementById('accident-date').value,
+            accidentLocation: document.getElementById('accident-location').value,
+            violationDetails: document.getElementById('offense').value
+        };
+        localStorage.setItem('perpetratorData', JSON.stringify(perpetratorData));
+
+        // 다음 페이지로 이동
+        window.location.href = 'acc2.html';
+    }
+</script>
 
 </body>
 </html>

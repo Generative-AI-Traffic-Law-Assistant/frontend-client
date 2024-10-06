@@ -84,10 +84,10 @@
 <h3>무슨 사고가 발생했나요?</h3>
 <form id="reportForm">
     <div>
-        <label for="related-documents">10. 사건 현장 사진:</label>
+        <label for="related-documents">11. 사건 현장 사진:</label>
         <input type="file" id="related-documents" name="related-documents" accept=".jpg,.jpeg,.png" required>
     </div>
-    <button type="button" onclick="convertToReport()">사건보고서 변환</button>
+    <button type="button" onclick="convertToReport()">사건보고서 생성</button>
     <button type="button" id="submitBtn" style="display:none;" onclick="submitForm()">제출</button>
 </form>
 
@@ -100,28 +100,65 @@
         }
 
         const file = fileInput.files[0];
-        const reader = new FileReader();
+        const formData = new FormData();
+        formData.append('file', file);
 
-        reader.onload = async function(event) {
-            const imgData = event.target.result;
+        try {
+            const response = await fetch('http://localhost:8000/generate_text', {
+                method: 'POST',
+                body: formData,
+                mode: 'cors'
+            });
 
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF();
-            pdf.addImage(imgData, 'JPEG', 10, 10, 190, 100); // 이미지 추가 (위치 및 크기 조정)
+            if (!response.ok) {
+                throw new Error('PDF 변환에 실패했습니다.');
+            }
 
-            pdf.save('사건보고서.pdf'); // PDF 다운로드
-        };
+            const blob = await response.blob();
+            const pdfUrl = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = pdfUrl;
+            link.download = '사건보고서.pdf';
+            link.click();
 
-        reader.readAsDataURL(file);
-
-        // 제출 버튼 표시
-        document.getElementById('submitBtn').style.display = 'block';
+            // 제출 버튼 표시
+            document.getElementById('submitBtn').style.display = 'block';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('PDF 변환 중 오류가 발생했습니다.');
+        }
     }
 
-    function submitForm() {
-        window.location.href = 'traffic_ai.html'; // 제출 시 페이지 이동
+    async function submitForm() {
+        // 로컬 스토리지에서 perpetratorData 가져오기
+        let perpetratorData = JSON.parse(localStorage.getItem('perpetratorData')) || {};
+
+        try {
+            // POST 요청으로 perpetratorData를 FastAPI 서버로 전송
+            const response = await fetch('http://localhost:8000/ask/perpetrator', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(perpetratorData),
+            });
+
+            const result = await response.json();
+        
+            // 받은 결과를 localStorage에 저장
+            localStorage.setItem('response', JSON.stringify(result));
+
+            alert('질문이 성공적으로 전송되었습니다.');
+            console.log(result);
+
+            // 결과 페이지로 이동
+            window.location.href = 'traffic_ai.html';
+        } catch (error) {
+            console.error('Error:', error);
+            alert('질문 전송 중 오류가 발생했습니다.');
+        }
     }
 </script>
-
+</script>
 </body>
 </html>

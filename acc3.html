@@ -78,30 +78,55 @@
 <h1>🛴킥보드 사고 처리 시스템</h1>
 <h3>무슨 사고가 발생했나요?</h3>
 
-<form action="acc4.html" method="POST">
+<form id="step3Form" onsubmit="saveStep3Data(event)">
     <div>
-        <label for="injury-severity">7. 상해 정도 (상대방 피해):</label>
-        <select id="injury-severity" name="injury-severity" required>
-            <option value="경미">경미</option>
-            <option value="중상">중상</option>
-            <option value="중증">중증</option>
-            <option value="없음">없음</option>
-        </select>
+        <label for="injury-description">6. 피해자 부상 내용:</label>
+        <input type="text" id="injury-description" name="injury-description" placeholder="피해자 부상 내용을 입력하세요" required>
     </div>
     <div>
-        <label for="self-injury-severity">7-1. 자신의 피해 정도:</label>
-        <input type="text" id="self-injury-severity" name="self-injury-severity" placeholder="자신이 입은 피해 정도 (있다면)">
+        <label for="accident-details">7. 사고 세부 사항:</label>
+        <input type="text" id="accident-details" name="accident-details" placeholder="사고 세부 사항을 입력하세요" required>
     </div>
     <div>
         <label for="settlement-status">8. 사고 합의 여부:</label>
-        <input type="text" id="settlement-status" name="settlement-status" placeholder="합의 시도 여부 및 진행 상태" required>
+        <input type="text" id="settlement-status" name="settlement-status" placeholder="사고 합의 여부를 알려주세요" required>
     </div>
     <div>
-        <label for="legal-preparation">9. 법적 대응 준비 여부:</label>
-        <input type="text" id="legal-preparation" name="legal-preparation" placeholder="대응 계획" required>
+        <label for="police-report-status">9. 경찰 신고 여부:</label>
+        <select id="police-report-status" name="police-report-status" required>
+            <option value="yes">예</option>
+            <option value="no">아니오</option>
+        </select>
     </div>
+    <div>
+        <label for="legal-plan">10. 법적 대응 준비 여부:</label>
+        <input type="text" id="legal-plan" name="legal-plan" placeholder="대응 계획을 입력하세요" required>
+    </div>
+
     <button type="submit">다음</button>
 </form>
+
+<script>
+    function saveStep3Data(event) {
+        event.preventDefault();
+
+        // 기존에 저장된 데이터를 가져옴
+        let perpetratorData = JSON.parse(localStorage.getItem('perpetratorData')) || {};
+
+        // 세 번째 페이지의 데이터를 추가
+        perpetratorData.injuryDescription = document.getElementById('injury-description').value;
+        perpetratorData.accidentDetails = document.getElementById('accident-details').value;
+        perpetratorData.settlementStatus = document.getElementById('settlement-status').value; 
+        perpetratorData.policeReport = document.getElementById('police-report-status').value === 'yes'; // 예 => true, 아니오 => false
+        perpetratorData.legalPlan = document.getElementById('legal-plan').value;
+
+        // 업데이트된 데이터를 다시 localStorage에 저장
+        localStorage.setItem('perpetratorData', JSON.stringify(perpetratorData));
+
+        // 다음 페이지로 이동
+        window.location.href = 'acc4.html';
+    }
+</script>
 
 </body>
 </html>

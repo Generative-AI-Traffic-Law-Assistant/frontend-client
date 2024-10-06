@@ -75,32 +75,49 @@
 <h1>🛴킥보드 사고 처리 시스템</h1>
 <h3>무슨 피해를 입으셨나요?</h3>
 
-<form action="dam3.html" method="POST">
+<form id="step2Form" onsubmit="saveStep2Data(event)">
     <div>
-        <label for="perpetrator-name">4. 가해자 정보</label>
-        <br>
-        <label for="perpetrator-name">- 이름:</label>
-        <input type="text" id="perpetrator-name" name="perpetrator-name" required>
-
-        <label for="perpetrator-contact">- 연락처:</label>
-        <input type="tel" id="perpetrator-contact" name="perpetrator-contact" required>
-
-        <label for="vehicle-info">- 차량 정보 (전동킥보드):</label>
+        <label for="vehicle-info">4. 나의 전동킥보드 정보 (전동킥보드):</label>
         <input type="text" id="vehicle-info" name="vehicle-info" required>
     </div>
 
     <div>
         <label for="accident-situation">5. 사고 당시 상황:</label>
-        <input type="text" id="accident-situation" name="accident-situation" placeholder="신호 상태, 도로 상태, 사고 경위" required>
+        <input type="text" id="accident-situation" name="accident-situation" required>
     </div>
 
     <div>
-        <label for="medical-expenses">6. 의료비/치료비 현황:</label>
-        <input type="text" id="medical-expenses" name="medical-expenses" placeholder="현재까지 발생한 치료비 내역" required>
+        <label for="insurance-status">6. 보험 가입 상태:</label>
+        <input type="text" id="insurance-status" name="insurance-status" required>
+    </div>
+
+    <div>
+        <label for="legal-plan">7. 법적 대응 계획:</label>
+        <input type="text" id="legal-plan" name="legal-plan" required>
     </div>
 
     <button type="submit">다음</button>
 </form>
+
+<script>
+    function saveStep2Data(event) {
+        event.preventDefault();
+
+        // 이전 단계에서 저장된 victimData 가져오기
+        let victimData = JSON.parse(localStorage.getItem('victimData')) || {};
+
+        // 새로운 정보 추가
+        victimData.scooterInfo = document.getElementById('vehicle-info').value;
+        victimData.accidentDetails = document.getElementById('accident-situation').value;
+        victimData.insuranceStatus = document.getElementById('insurance-status').value;
+        victimData.legalPlan = document.getElementById('legal-plan').value;
+
+        // 다시 저장
+        localStorage.setItem('victimData', JSON.stringify(victimData));
+        window.location.href = 'dam3.html';
+    }
+</script>
+
 
 </body>
 </html>

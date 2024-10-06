@@ -78,19 +78,10 @@
 <h1>🛴킥보드 사고 처리 시스템</h1>
 <h3>무슨 피해를 입으셨나요?</h3>
 
-<form action="dam4.html" method="POST">
-    <div>
-        <label for="insurance-status">7. 가입된 자동차 보험 여부:</label>
-        <br>
-        <label for="insurance-status" style="font-size: 90%"> - 무보험차 상해 특약 여부 확인</label>
-        <select id="insurance-status" name="insurance-status" required>
-            <option value="yes">가입</option>
-            <option value="no">미가입</option>
-        </select>
-    </div>
+<form id="step3Form" onsubmit="saveStep3Data(event)">
 
     <div>
-        <label for="report-status">8. 신고 여부:</label>
+        <label for="report-status">8. 경찰 신고 여부:</label>
         <select id="report-status" name="report-status" required>
             <option value="reported">신고함</option>
             <option value="not-reported">신고하지 않음</option>
@@ -98,13 +89,58 @@
     </div>
 
     <div>
-        <label for="witness-name">9. 목격자 정보:</label>
-        <input type="text" id="witness-name" name="witness-name" placeholder="목격자 이름 (있다면)">
-        <input type="tel" id="witness-contact" name="witness-contact" placeholder="목격자 연락처 (있다면)">
+        <label for="settlement-status">9. 합의 상황:</label>
+        <input type="text" id="settlement-status" name="settlement-status" placeholder="현재까지의 합의 상황" required>
     </div>
 
-    <button type="submit">다음</button>
+    <div>
+        <label for="vehicle-info">10. 가해 차량 정보:</label>
+        <input type="text" id="vehicle-info" name="vehicle-info" placeholder="가해 차량 정보를 입력하세요" required>
+    </div>
+
+    <div>
+        <label for="perpetrator-contact">11. 가해자 연락처 여부:</label>
+        <select id="perpetrator-contact" name="perpetrator-contact" required>
+            <option value="true">받음</option>
+            <option value="false">받지 않음</option>
+        </select>
+    </div>
+
+    <div>
+        <label for="is-witness">12. 목격자 존재 여부:</label>
+        <select id="is-witness" name="is-witness" required>
+            <option value="true">존재함</option>
+            <option value="false">존재하지 않음</option>
+        </select>
+    </div>
+
+    
+
+    <button type="submit">제출</button>
 </form>
+
+<script>
+    function saveStep3Data(event) {
+        event.preventDefault();
+
+        // 이전 단계에서 저장된 victimData 가져오기
+        let victimData = JSON.parse(localStorage.getItem('victimData')) || {};
+
+        // 새로운 정보 추가
+        victimData.policeReport = document.getElementById('report-status').value === 'reported';
+        victimData.settlementStatus = document.getElementById('settlement-status').value;
+        victimData.vehicleInfo = document.getElementById('vehicle-info').value;
+        victimData.perpetratorContact = document.getElementById('perpetrator-contact').value === 'true';
+        victimData.hasWitness = document.getElementById('is-witness').value === 'true';
+
+        // 다시 저장
+        localStorage.setItem('victimData', JSON.stringify(victimData));
+
+        // 다음 페이지로 이동
+        window.location.href = 'dam4.html'; // 다음 단계로 이동
+    }
+</script>
+
 
 </body>
 </html>

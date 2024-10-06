@@ -67,7 +67,7 @@
             border: 1px solid #7e94af;
             border-radius: 5px;
         }
-        .input-container {
+        #qaForm {
             display: flex;
             position: fixed; /* 화면 하단에 고정 */
             bottom: 40px; /* 하단 여백 */
@@ -106,50 +106,79 @@
 <h2>🛴 킥보드 사고 처리 시스템</h2>
 <div class="container" id="qaContainer">
 </div>
+<form id="qaForm" onsubmit="submitQuestion(event)">
+    <input type="text" id="userInput" placeholder="질문을 입력하세요..." required>
+    <button type="submit">질문 제출</button>
+</form>
 
-<div class="input-container">
-    <input type="text" id="userInput" placeholder="질문을 입력하세요...">
-    <button onclick="submitQuestion()">제출</button>
-</div>
 
 <script>
     // 페이지가 로드될 때 기본 대답 추가
     document.addEventListener('DOMContentLoaded', () => {
-        const responseDiv = document.createElement('div');
-        responseDiv.className = 'response-container';
-        responseDiv.innerHTML = '초기대답글<br>이렇게 해야 한다~~!';
+    const responseDiv = document.createElement('div');
+    responseDiv.className = 'response-container';
 
-        const lawyerRecommendationDiv = document.createElement('div');
-        lawyerRecommendationDiv.className = 'lawyer-recommendation';
-        lawyerRecommendationDiv.innerHTML = '관련 변호사 추천<br>변호사 정보(이름, 소개글, email, 전화)';
+    // localStorage에서 저장된 response 데이터 가져오기
+    const savedResponse = localStorage.getItem('response');
+    if (savedResponse) {
+        const parsedResponse = JSON.parse(savedResponse);
+        responseDiv.innerHTML = `답변: ${parsedResponse.answer.result}`;
+    } else {
+        responseDiv.innerHTML = '응답을 찾을 수 없습니다.';
+    }
 
-        document.getElementById('qaContainer').appendChild(responseDiv);
-        document.getElementById('qaContainer').appendChild(lawyerRecommendationDiv);
-    });
+    const lawyerRecommendationDiv = document.createElement('div');
+    lawyerRecommendationDiv.className = 'lawyer-recommendation';
+    lawyerRecommendationDiv.innerHTML = '관련 변호사 추천<br>변호사 정보(이름, 소개글, email, 전화)';
 
-    function submitQuestion() {
-        const inputField = document.getElementById('userInput');
-        const question = inputField.value.trim();
+    document.getElementById('qaContainer').appendChild(responseDiv);
+    document.getElementById('qaContainer').appendChild(lawyerRecommendationDiv);
+});
 
-        if (question) {
-            // 질문을 표시
-            const questionDiv = document.createElement('div');
-            questionDiv.className = 'entry';
-            questionDiv.textContent = question;
-            document.getElementById('qaContainer').prepend(questionDiv);
 
-            // 입력 필드 초기화
-            inputField.value = '';
+async function submitQuestion(event) {
+    event.preventDefault(); // 폼 제출 기본 동작 방지
+    const inputField = document.getElementById('userInput');
+    const question = inputField.value.trim();
 
-            // 로딩 후 답변 표시
-            setTimeout(() => {
+    if (question) {
+        // 질문을 표시
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'entry';
+        questionDiv.textContent = question;
+        document.getElementById('qaContainer').prepend(questionDiv);
+
+        // 입력 필드 초기화
+        inputField.value = '';
+
+        try {
+            // FastAPI에 POST 요청
+            const response = await fetch('http://localhost:8000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ "question": question }) // JSON으로 변환하여 요청
+            });
+
+            if (response.ok) {
+                const result = await response.json(); // 응답 데이터를 JSON으로 변환
+                const answer = result.answer.result; // answer 내의 result만 가져오기
+
+                // 답변 표시
                 const responseDiv = document.createElement('div');
                 responseDiv.className = 'response';
-                responseDiv.textContent = '대답입니다'; // 여기서 실제 답변을 추가할 수 있습니다.
+                responseDiv.textContent = answer; // 실제 result 값을 추가
                 document.getElementById('qaContainer').prepend(responseDiv);
-            }, 1000); // 1초 후에 답변 출력
+            } else {
+                console.error('응답 실패:', response.statusText);
+            }
+        } catch (error) {
+            console.error('에러 발생:', error);
         }
     }
+}
+
 </script>
 
 </body>
